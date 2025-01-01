@@ -1,0 +1,292 @@
+Dim n, i As Long
+Dim ISNEW As Boolean
+-----------------------------------------------------------------------------------------------
+===============================================================================================
+
+'Loadroll number in combobox
+Private Sub loadRoll()
+    n = Worksheets("Database").Range("A1").CurrentRegion.Rows.Count
+    ComboBox1.Clear
+    For i = 2 To n
+        ComboBox1.AddItem Worksheets("Database").Cells(i, 1).Value
+    Next i
+End Sub
+
+-----------------------------------------------------------------------------------------------
+===============================================================================================
+
+Private Sub bclose_Click()
+Unload Me
+End Sub
+
+'search details
+Private Sub btnsearch_Click()
+    update.Enabled = False
+    regtext.Text = ""
+    tname.Text = ""
+    tage.Text = ""
+    ComboBox2.Value = ""
+    tphone.Text = ""
+    temail.Text = ""
+    CBDistrict.Value = ""
+    n = Worksheets("Database").Range("A1").CurrentRegion.Rows.Count
+    For i = 2 To n
+        If Trim(Worksheets("Database").Cells(i, 1).Value) = Trim(ComboBox1.Text) Then
+            regtext.Text = Worksheets("Database").Cells(i, 1).Value
+            tname.Text = Worksheets("Database").Cells(i, 2).Value
+            tage.Text = Worksheets("Database").Cells(i, 3).Value
+            ComboBox2.Text = Worksheets("Database").Cells(i, 4).Value
+            tphone.Text = Worksheets("Database").Cells(i, 5).Value
+            temail.Text = Worksheets("Database").Cells(i, 6).Value
+            CBDistrict.Text = Worksheets("Database").Cells(i, 7).Value
+            Exit For
+        End If
+    Next i
+If tname.Text = "" Then
+Else
+    save.Enabled = True
+    delete.Enabled = True
+End If
+End Sub
+
+-----------------------------------------------------------------------------------------------
+===============================================================================================
+
+Private Sub delete_Click()
+n = Worksheets("Database").Range("A1").CurrentRegion.Rows.Count
+Dim confirm
+confirm = MsgBox("Are You Sure Delete ?", vbYesNo, "Delete")
+If (confirm = vbYes) Then
+    For i = 2 To n
+    If Trim(Worksheets("Database").Cells(i, 1).Value) = Trim(ComboBox1.Text) Then
+        Worksheets("Database").Range(i & ":" & i).delete
+        regtext.Text = ""
+        tname.Text = ""
+        tage.Text = ""
+        ComboBox2.Value = ""
+        tphone.Text = ""
+        temail.Text = ""
+        CBDistrict.Value = ""
+        Call loadRoll
+    End If
+    Next i
+End If
+update.Enabled = True
+save.Enabled = False
+delete.Enabled = False
+End Sub
+
+-----------------------------------------------------------------------------------------------
+===============================================================================================
+
+Private Sub save_Click()
+If Trim(regtext.Text) = "" Then
+        MsgBox "Enter Your Reg.No", vbCritical, "Error Message"
+        regtext.SetFocus
+        Exit Sub
+End If
+
+If Trim(tname.Text) = "" Then
+    MsgBox "Enter Your Name", vbCritical, "Error Message"
+    tname.SetFocus
+    Exit Sub
+End If
+
+If Trim(tage.Text) = "" Then
+    MsgBox "Enter Your Age", vbCritical, "Error Message"
+    tage.SetFocus
+    Exit Sub
+End If
+
+If Trim(tphone.Text) = "" Then
+    MsgBox "Enter Your Phone", vbCritical, "Error Message"
+    tphone.SetFocus
+    Exit Sub
+End If
+
+If Trim(ComboBox2.Text) = "" Then
+    MsgBox "Select Your Department", vbCritical, "Error Message"
+    ComboBox2.SetFocus
+    Exit Sub
+End If
+
+If Trim(temail.Text) = "" Then
+    MsgBox "Enter Your Email", vbCritical, "Error Message"
+    temail.SetFocus
+    Exit Sub
+End If
+
+If Trim(CBDistrict.Text) = "" Then
+    MsgBox "Select Your District", vbCritical, "Error Message"
+    CBDistrict.SetFocus
+    Exit Sub
+End If
+Call saveRecord
+End Sub
+
+-----------------------------------------------------------------------------------------------
+===============================================================================================
+
+Private Sub update_Click()
+If Trim(regtext.Text) = "" Then
+        MsgBox "Enter Your Reg.No", vbCritical, "Error Message"
+        regtext.SetFocus
+        Exit Sub
+End If
+
+If Trim(tname.Text) = "" Then
+    MsgBox "Enter Your Name", vbCritical, "Error Message"
+    tname.SetFocus
+    Exit Sub
+End If
+
+If Trim(tage.Text) = "" Then
+    MsgBox "Enter Your Age", vbCritical, "Error Message"
+    tage.SetFocus
+    Exit Sub
+End If
+
+If Trim(tphone.Text) = "" Then
+    MsgBox "Enter Your Phone", vbCritical, "Error Message"
+    tphone.SetFocus
+    Exit Sub
+End If
+
+If Trim(ComboBox2.Text) = "" Then
+    MsgBox "Select Your Department", vbCritical, "Error Message"
+    ComboBox2.SetFocus
+    Exit Sub
+End If
+
+If Trim(temail.Text) = "" Then
+    MsgBox "Enter Your Email", vbCritical, "Error Message"
+    temail.SetFocus
+    Exit Sub
+End If
+
+If Trim(CBDistrict.Text) = "" Then
+    MsgBox "Select Your District", vbCritical, "Error Message"
+    CBDistrict.SetFocus
+    Exit Sub
+End If
+ISNEW = True
+Call saveRecord
+End Sub
+
+-----------------------------------------------------------------------------------------------
+===============================================================================================
+
+'saveRecord Details
+Private Sub saveRecord()
+MsgBox "All Record Summit"
+    n = Worksheets("Database").Range("A1").CurrentRegion.Rows.Count
+If ISNEW = True Then
+    With Worksheets("Database").Range("A1")
+        .Offset(n, 0).Value = regtext.Text
+        .Offset(n, 1).Value = tname.Text
+        .Offset(n, 2).Value = tage.Text
+        .Offset(n, 3).Value = ComboBox2.Value
+        .Offset(n, 4).Value = tphone.Text
+        .Offset(n, 5).Value = temail.Text
+        .Offset(n, 6).Value = CBDistrict.Value
+    End With
+Else
+For i = 2 To n
+    If Trim(Worksheets("Database").Cells(i, 1).Value) = Trim(ComboBox1.Text) Then
+        Worksheets("Database").Cells(i, 1).Value = regtext.Text
+        Worksheets("Database").Cells(i, 2).Value = tname.Text
+        Worksheets("Database").Cells(i, 3).Value = tage.Text
+        Worksheets("Database").Cells(i, 4).Value = ComboBox2.Value
+        Worksheets("Database").Cells(i, 5).Value = tphone.Text
+        Worksheets("Database").Cells(i, 6).Value = temail.Text
+        Worksheets("Database").Cells(i, 7).Value = CBDistrict.Value
+        Exit For
+    End If
+Next i
+End If
+
+' Clear the textboxes and reset state
+regtext.Text = ""
+tname.Text = ""
+tage.Text = ""
+ComboBox2.Value = ""
+tphone.Text = ""
+temail.Text = ""
+CBDistrict.Value = ""
+Call loadRoll
+update.Enabled = True
+save.Enabled = False
+delete.Enabled = False
+bclose.Caption = "Close"
+ISNEW = False
+End Sub
+
+-----------------------------------------------------------------------------------------------
+===============================================================================================
+
+Private Sub UserForm_Activate()
+
+    ' Add items to ComboBox2
+    With Me.ComboBox2
+        .AddItem "BACHELOR OF ARTS IN ECONOMICS"
+        .AddItem "BACHELOR OF BUSINESS ADMINISTRATION"
+        .AddItem "BACHELOR OF COMMERCE"
+        .AddItem "BACHELOR OF COMPUTER APPLICATION"
+        .AddItem "BACHELOR OF COMPUTER SCIENCE"
+        .AddItem "BACHELOR OF ECONOMICS"
+        .AddItem "BACHELOR OF ELECTRONICS"
+        .AddItem "BACHELOR OF SOFTWARE ENGINEERING"
+    End With
+
+    ' Add items to CBDistrict
+    With Me.CBDistrict
+        .AddItem "ARIYALUR"
+        .AddItem "CHENGALPATTU"
+        .AddItem "CHENNAI"
+        .AddItem "COIMBATORE"
+        .AddItem "CUDDALORE"
+        .AddItem "DHARMAPURI"
+        .AddItem "DINDIGUL"
+        .AddItem "ERODE"
+        .AddItem "KALLAKURICHI"
+        .AddItem "KANCHEEPURAM"
+        .AddItem "KARUR"
+        .AddItem "KRISHNAGIRI"
+        .AddItem "MADURAI"
+        .AddItem "MAYILADUTHURAI"
+        .AddItem "NAGAPATTINAM"
+        .AddItem "KANYAKUMARI"
+        .AddItem "NAMAKKAL"
+        .AddItem "PERAMBALUR"
+        .AddItem "PUDUKOTTAI"
+        .AddItem "RAMANATHAPURAM"
+        .AddItem "RANIPET"
+        .AddItem "SALEM"
+        .AddItem "SIVAGANGA"
+        .AddItem "TENKASI"
+        .AddItem "THANJAVUR"
+        .AddItem "THENI"
+        .AddItem "THIRUVALLUR"
+        .AddItem "THIRUVARUR"
+        .AddItem "THOOTHUKUDI"
+        .AddItem "TIRUCHIRAPPALLI"
+        .AddItem "TIRUNELVELI"
+        .AddItem "TIRUPATHUR"
+        .AddItem "TIRUPPUR"
+        .AddItem "TIRUVANNAMALAI"
+        .AddItem "THE NILGIRIS"
+        .AddItem "VELLORE"
+        .AddItem "VILUPPURAM"
+        .AddItem "VIRUDHUNAGAR"
+    End With
+End Sub
+
+-----------------------------------------------------------------------------------------------
+===============================================================================================
+'FORM LOADING EVENT
+Private Sub UserForm_Initialize()
+Call loadRoll
+save.Enabled = False
+delete.Enabled = False
+ISNEW = False
+End Sub
